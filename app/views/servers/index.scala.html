@@ -1,0 +1,32 @@
+@(servers: List[Server])
+
+@import helper.twitterBootstrap._
+
+@main("aiueofiou") {
+  <legend>Servers</legend>
+  <table class="table table-striped table-borderd table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>private ipaddr</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    @for((server) <- servers) {
+      <tr>
+        <td>@server.id</td>
+        <td>@server.privateIpAddr</td>
+        <td>
+          <a href="@controllers.server.routes.ServersController.show(server.id)">
+            <i class="glyphicon glyphicon-edit"></i>
+          </a>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+  <a href="@controllers.server.routes.ServersController.add()">
+    CREATE SERVER
+  </a>
+}

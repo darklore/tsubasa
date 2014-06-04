@@ -1,0 +1,15 @@
+@(serverForm: Form[ServerForm], id: Long)
+
+@import helper.twitterBootstrap._
+
+@main("Edit Server Information") {
+  @helper.form(action = controllers.server.routes.ServersController.update_post(id)){
+    <div class="container">
+      <fieldset>
+        <legend>Edit server Info</legend>
+        @helper.inputText(serverForm("privateIpAddr"))
+        <input type="submit" value="Edit" class="btn btn-primary">
+      </fieldset>
+    </div>
+  }
+}
