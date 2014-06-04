@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET         /                           controllers.Application.index
+GET         /                           controllers.server.ServersController.index
 
 # Servers
 GET         /servers                    controllers.server.ServersController.index
