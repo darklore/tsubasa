@@ -7,7 +7,7 @@
     <div class="container">
       <fieldset>
         <legend>Edit server Info</legend>
-        @helper.inputText(serverForm("privateIpAddr"))
+        @helper.inputText(serverForm("privateIpAddr"), '_label -> "private ip address")
         <input type="submit" value="Edit" class="btn btn-primary">
       </fieldset>
     </div>
