@@ -1,0 +1,18 @@
+@()
+
+@import helper.twitterBootstrap._
+
+@main("Cookbook Upload") {
+  @helper.form(action = controllers.cookbook.routes.CookbooksController.upload, 'enctype -> "multipart/form-data") {
+
+    <input type="file" name="cookbook">
+
+    <p>
+      <input type="submit">
+    </p>
+
+    <a href="@controllers.cookbook.routes.CookbooksController.download()">
+      download
+    </a>
+  }
+}

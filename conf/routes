@@ -3,18 +3,23 @@
 # ~~~~
 
 # Home page
-GET         /                           controllers.server.ServersController.index
+GET           /                          controllers.server.ServersController.index
 
 # Servers
-GET         /servers                    controllers.server.ServersController.index
-GET         /servers/new                controllers.server.ServersController.add
-POST        /servers                    controllers.server.ServersController.create
-GET         /servers/:id                controllers.server.ServersController.show(id: Long)
-GET         /servers/:id/edit           controllers.server.ServersController.edit(id: Long)
-PUT         /servers/:id                controllers.server.ServersController.update(id: Long)
-POST        /servers/:id/update         controllers.server.ServersController.update_post(id: Long)
-DELETE      /servers/:id                controllers.server.ServersController.delete(id: Long)
-GET         /servers/:id/delete         controllers.server.ServersController.delete_get(id: Long)
+GET           /servers                   controllers.server.ServersController.index
+GET           /servers/new               controllers.server.ServersController.add
+POST          /servers                   controllers.server.ServersController.create
+GET           /servers/:id               controllers.server.ServersController.show(id: Long)
+GET           /servers/:id/edit          controllers.server.ServersController.edit(id: Long)
+PUT           /servers/:id               controllers.server.ServersController.update(id: Long)
+POST          /servers/:id/update        controllers.server.ServersController.update_post(id: Long)
+DELETE        /servers/:id               controllers.server.ServersController.delete(id: Long)
+GET           /servers/:id/delete        controllers.server.ServersController.delete_get(id: Long)
+
+# cookbooks
+GET           /cookbooks/new             controllers.cookbook.CookbooksController.add
+POST          /cookbooks                 controllers.cookbook.CookbooksController.upload
+GET           /cookbook                  controllers.cookbook.CookbooksController.download
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file               controllers.Assets.at(path="/public", file)
+GET           /assets/*file              controllers.Assets.at(path="/public", file)
