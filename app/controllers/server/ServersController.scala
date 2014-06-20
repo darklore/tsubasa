@@ -1,5 +1,6 @@
 package controllers.server
 
+import domain.service.server.ServerInitializers
 import play.api.mvc.{Action, Controller}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -21,6 +22,7 @@ object ServersController extends Controller {
     val form = serverForm.bindFromRequest.get
     val server = Server(0, form.privateIpAddr)
     Servers.insert(server)
+    ServerInitializers.getInitializer(server).start()
     Redirect(routes.ServersController.index())
   }
 
