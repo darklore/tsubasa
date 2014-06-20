@@ -25,8 +25,7 @@ class ServerInitializer(server: Server) {
 
     def receive = {
       case s: String =>
-        val rootPath = Play.current.path.getPath()
-        val sshKeyPath = rootPath + "/conf/ssh_keys/id_rsa"
+        val sshKeyPath = Play.current.path.getPath() + "/conf/ssh_keys/id_rsa"
 
         val cmd = "/usr/bin/knife solo prepare " + s + " -x vagrant -i " + sshKeyPath + " --bootstrap-version 11.12.0"
         Logger.info("Start: " + cmd)
