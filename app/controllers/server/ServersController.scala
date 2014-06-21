@@ -4,7 +4,7 @@ import domain.service.server.ServerInitializers
 import play.api.mvc.{Action, Controller}
 import play.api.data.Form
 import play.api.data.Forms._
-import models.{ Server, Servers, ServerForm }
+import models.{Cookbook, Server, Servers, ServerForm}
 
 object ServersController extends Controller {
 
@@ -32,7 +32,8 @@ object ServersController extends Controller {
 
   def show(id: Long) = Action {
     val server = Servers.findById(id)
-    Ok(views.html.servers.show(server))
+    val cookbook = Cookbook.get()
+    Ok(views.html.servers.show(server, cookbook))
   }
 
   def edit(id: Long) = Action {
@@ -54,5 +55,4 @@ object ServersController extends Controller {
     Redirect(routes.ServersController.index())
   }
   def delete_get(id: Long) = delete(id)
-
 }

@@ -14,7 +14,7 @@ object Servers {
   class ServerTable(tag: Tag) extends Table[Server](tag, "Server") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def privateIpAddr = column[String]("PRIVATE_IP_ADDR", O.NotNull)
-    def * = (id, privateIpAddr) <>(Server.tupled, Server.unapply)
+    def * = (id, privateIpAddr) <> (Server.tupled, Server.unapply)
   }
 
   // query object

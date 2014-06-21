@@ -1,0 +1,26 @@
+@(cookbook: Cookbook)
+
+@main("Cookbook Info") {
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>name</th>
+        <th>version</th>
+        <th>recipes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>@cookbook.name</td>
+        <td>@cookbook.version</td>
+        <td>
+          <ul>
+            @for(recipe <- cookbook.recipes) {
+              <li>@recipe</li>
+            }
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+}

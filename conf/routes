@@ -19,7 +19,8 @@ GET           /servers/:id/delete        controllers.server.ServersController.de
 # cookbooks
 GET           /cookbooks/new             controllers.cookbook.CookbooksController.add
 POST          /cookbooks                 controllers.cookbook.CookbooksController.upload
-GET           /cookbook                  controllers.cookbook.CookbooksController.download
+GET           /cookbook                  controllers.cookbook.CookbooksController.show
+GET           /cookbook/download         controllers.cookbook.CookbooksController.download
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file              controllers.Assets.at(path="/public", file)
