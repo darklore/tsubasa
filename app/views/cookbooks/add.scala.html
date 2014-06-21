@@ -4,15 +4,16 @@
 
 @main("Cookbook Upload") {
   @helper.form(action = controllers.cookbook.routes.CookbooksController.upload, 'enctype -> "multipart/form-data") {
-
-    <input type="file" name="cookbook">
-
-    <p>
-      <input type="submit">
-    </p>
+    <div class="container">
+      <fieldSet>
+        <legend>Upload cookbook</legend>
+        <input type="file" name="cookbook">
+        <input type="submit">
+      </fieldSet>
+    </div>
 
     <a href="@controllers.cookbook.routes.CookbooksController.download()">
-      download
+      Download cookbook
     </a>
   }
 }

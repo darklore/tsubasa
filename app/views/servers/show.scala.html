@@ -1,4 +1,4 @@
-@(server: Server, cookbook: Cookbook)
+@(server: Server, cookbook: Cookbook, recipeForm: Form[Map[String, String]])
 
 @import helper.twitterBootstrap._
 
@@ -29,4 +29,16 @@
       </tr>
     </tbody>
   </table>
+  @helper.form(action = controllers.server.routes.ServersController.install(server.id)) {
+    <div class="container">
+      <fieldset>
+        <legend>Configure with chef recipe</legend>
+        @helper.select(recipeForm("recipe"),
+          cookbook.recipes.toSeq.map { c => (c, c) },
+          '_label -> "Select recipe"
+        )
+        <input type="submit" value="Install" class="btn btn-primary">
+      </fieldset>
+    </div>
+  }
 }

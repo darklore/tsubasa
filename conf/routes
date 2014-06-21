@@ -15,6 +15,7 @@ PUT           /servers/:id               controllers.server.ServersController.up
 POST          /servers/:id/update        controllers.server.ServersController.update_post(id: Long)
 DELETE        /servers/:id               controllers.server.ServersController.delete(id: Long)
 GET           /servers/:id/delete        controllers.server.ServersController.delete_get(id: Long)
+POST          /servers/:id/install       controllers.server.ServersController.install(id: Long)
 
 # cookbooks
 GET           /cookbooks/new             controllers.cookbook.CookbooksController.add

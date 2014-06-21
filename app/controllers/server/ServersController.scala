@@ -1,6 +1,7 @@
 package controllers.server
 
 import domain.service.server.ServerInitializers
+import play.api.Logger
 import play.api.mvc.{Action, Controller}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -14,6 +15,14 @@ object ServersController extends Controller {
     )(ServerForm.apply)(ServerForm.unapply)
   )
 
+  val recipeForm = Form(
+    mapping(
+    "recipe" -> text
+    )
+      ((recipe) => Map("recipe" -> recipe))
+      ((map) => Some(map("recipe")))
+  )
+
   def index = Action {
     Ok(views.html.servers.index(Servers.all()))
   }
@@ -21,8 +30,6 @@ object ServersController extends Controller {
   def create = Action { implicit request =>
     val form = serverForm.bindFromRequest.get
     val server = Server(0, form.privateIpAddr)
-    Servers.insert(server)
-    ServerInitializers.getInitializer(server).start()
     Redirect(routes.ServersController.index())
   }
 
@@ -33,7 +40,7 @@ object ServersController extends Controller {
   def show(id: Long) = Action {
     val server = Servers.findById(id)
     val cookbook = Cookbook.get()
-    Ok(views.html.servers.show(server, cookbook))
+    Ok(views.html.servers.show(server, cookbook, recipeForm))
   }
 
   def edit(id: Long) = Action {
@@ -55,4 +62,14 @@ object ServersController extends Controller {
     Redirect(routes.ServersController.index())
   }
   def delete_get(id: Long) = delete(id)
+
+  def install(id: Long) = Action { implicit request =>
+    val form = recipeForm.bindFromRequest.get
+    val recipeName = form("recipe")
+    Logger.info(recipeName)
+    val server = Servers.findById(id)
+//    ServerInitializers.getInitializer(server).start()
+    ServerInitializers.getInitializer(server).install(recipeName)
+    Redirect(routes.ServersController.show(id))
+  }
 }
