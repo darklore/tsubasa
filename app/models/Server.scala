@@ -5,7 +5,7 @@ import play.api.Play.current
 import play.api.db.slick.Config.driver.simple._
 import scala.language.postfixOps
 
-case class Server(id: Long, privateIpAddr: String)
+case class Server(id: Long, ipAddr: String)
 
 object Servers {
 

@@ -47,7 +47,7 @@ object ServersController extends Controller {
 
   def edit(id: Long) = Action {
     val server = Servers.findById(id)
-    val form = ServerForm(server.privateIpAddr)
+    val form = ServerForm(server.ipAddr)
     Ok(views.html.servers.edit(serverForm.fill(form), id))
   }
 

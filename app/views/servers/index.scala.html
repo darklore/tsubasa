@@ -16,7 +16,7 @@
     @for((server) <- servers) {
       <tr>
         <td>@server.id</td>
-        <td>@server.privateIpAddr</td>
+        <td>@server.ipAddr</td>
         <td>
           <a href="@controllers.server.routes.ServersController.show(server.id)">
             <i class="glyphicon glyphicon-edit"></i>

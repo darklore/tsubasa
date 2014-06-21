@@ -16,7 +16,7 @@ class ServerInitializer(server: Server) {
   case class InstallCommand(recipeName: String)
 
   def start() = {
-    Logger.info(server.privateIpAddr)
+    Logger.info(server.ipAddr)
     ref ! new InitializeCommand
   }
 
@@ -29,32 +29,32 @@ class ServerInitializer(server: Server) {
     import scala.sys.process._
 
     val logger = ProcessLogger(
-      (o: String) => Logger.info("[" + server.privateIpAddr + "]" + " out " + o),
-      (e: String) => Logger.warn("[" + server.privateIpAddr + "]" + " err " + e)
+      (o: String) => Logger.info("[" + server.ipAddr + "]" + " out " + o),
+      (e: String) => Logger.warn("[" + server.ipAddr + "]" + " err " + e)
     )
 
     def receive = {
       case _: InitializeCommand =>
-        val cmd = "/usr/bin/knife solo prepare " + server.privateIpAddr + " -x vagrant -i " + sshKeyPath + " --bootstrap-version 11.12.0"
+        val cmd = "/usr/bin/knife solo prepare " + server.ipAddr + " -x vagrant -i " + sshKeyPath + " --bootstrap-version 11.12.0"
         Logger.info("Start: " + cmd)
         cmd ! logger
 
       case installCmd: InstallCommand =>
         val cookbookDir = Play.current.path.getPath + "/data/cookbooks/cookbooks"
         // delete previous cookbook
-        val rmCmd = "ssh -l vagrant -i " + sshKeyPath + " " + server.privateIpAddr +
-          " rm -r /tmp/cookbooks"
+        val rmCmd = "ssh -l vagrant -i " + sshKeyPath + " " + server.ipAddr +
+          " rm -rf /tmp/cookbooks"
         Logger.info("Start: " + rmCmd)
         rmCmd ! logger
 
         //upload cookbook
         val uploadCmd = "/usr/bin/scp -i " + sshKeyPath + " -r " +
-          cookbookDir + " vagrant@" + server.privateIpAddr + ":/tmp/cookbooks"
+          cookbookDir + " vagrant@" + server.ipAddr + ":/tmp/cookbooks"
         Logger.info("Start: " + uploadCmd)
         uploadCmd ! logger
 
         // execute chef-solo
-        val chefSoloCmd = "ssh -l vagrant -i " + sshKeyPath + " " + server.privateIpAddr +
+        val chefSoloCmd = "ssh -l vagrant -i " + sshKeyPath + " " + server.ipAddr +
           " -t sudo chef-solo -c /tmp/solo.rb -o \"recipe[" + installCmd.recipeName + "]\" -l debug"
         Logger.info("Start: " + chefSoloCmd)
         chefSoloCmd ! logger
