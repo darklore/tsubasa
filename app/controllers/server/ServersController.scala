@@ -30,6 +30,8 @@ object ServersController extends Controller {
   def create = Action { implicit request =>
     val form = serverForm.bindFromRequest.get
     val server = Server(0, form.privateIpAddr)
+    Servers.insert(server)
+    ServerInitializers.getInitializer(server).start()
     Redirect(routes.ServersController.index())
   }
 
@@ -68,7 +70,6 @@ object ServersController extends Controller {
     val recipeName = form("recipe")
     Logger.info(recipeName)
     val server = Servers.findById(id)
-//    ServerInitializers.getInitializer(server).start()
     ServerInitializers.getInitializer(server).install(recipeName)
     Redirect(routes.ServersController.show(id))
   }
