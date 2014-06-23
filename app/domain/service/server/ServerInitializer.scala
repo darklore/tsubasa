@@ -35,27 +35,26 @@ class ServerInitializer(server: Server) {
 
     def receive = {
       case _: InitializeCommand =>
-        val cmd = "/usr/bin/knife solo prepare " + server.ipAddr + " -x vagrant -i " + sshKeyPath + " --bootstrap-version 11.12.0"
+        val cmd = Seq("/usr/bin/knife", "solo","prepare", server.ipAddr, "-x", "vagrant", "-i", sshKeyPath, "--bootstrap-version", "11.12.0")
         Logger.info("Start: " + cmd)
         cmd ! logger
 
       case installCmd: InstallCommand =>
         val cookbookDir = Play.current.path.getPath + "/data/cookbooks/cookbooks"
-        // delete previous cookbook
-        val rmCmd = "ssh -l vagrant -i " + sshKeyPath + " " + server.ipAddr +
-          " rm -rf /tmp/cookbooks"
-        Logger.info("Start: " + rmCmd)
-        rmCmd ! logger
 
-        //upload cookbook
-        val uploadCmd = "/usr/bin/scp -i " + sshKeyPath + " -r " +
-          cookbookDir + " vagrant@" + server.ipAddr + ":/tmp/cookbooks"
-        Logger.info("Start: " + uploadCmd)
-        uploadCmd ! logger
+        // sync cookbook
+        val rsyncCmd = Seq("/usr/bin/rsync", "-a", "--delete", "-e", "ssh -i " + sshKeyPath, cookbookDir + "/", "vagrant@" + server.ipAddr + ":/tmp/cookbooks")
+        Logger.info("Start: " + rsyncCmd)
+        rsyncCmd ! logger
+
+        // set cookbook path
+        val cookbookPathCmd = Seq("ssh", "vagrant@" + server.ipAddr, "-i", sshKeyPath, "echo \"cookbook_path '/tmp/cookbooks'\" > /tmp/solo.rb")
+        Logger.info("start: " + cookbookPathCmd)
+        cookbookPathCmd ! logger
 
         // execute chef-solo
-        val chefSoloCmd = "ssh -l vagrant -i " + sshKeyPath + " " + server.ipAddr +
-          " -t sudo chef-solo -c /tmp/solo.rb -o \"recipe[" + installCmd.recipeName + "]\" -l debug"
+        val chefSoloCmd = Seq("ssh", "vagrant@" + server.ipAddr, "-i", sshKeyPath,
+          "-t", "sudo chef-solo -c /tmp/solo.rb -o \"recipe[" + installCmd.recipeName + "]\" -l debug")
         Logger.info("Start: " + chefSoloCmd)
         chefSoloCmd ! logger
       case _ =>
